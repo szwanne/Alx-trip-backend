@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path('trips/', views.UserProfileList.as_view())
+    path('trips/', views.UserProfileListCreate.as_view())
 ]
