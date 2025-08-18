@@ -34,3 +34,11 @@ class TripListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+
+
+class TripRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TripSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Trip.objects.filter(user=self.request.user)

@@ -9,5 +9,7 @@ urlpatterns = [
     path('profiles/<int:pk>', views.UserProfileRetrieveUpdateDestroy.as_view(),
          name='userprofile-detail'),
     # Trip endpoints
-    path('trips/', views.TripListCreate.as_view(), name='trip-list-create')
+    path('trips/', views.TripListCreate.as_view(), name='trip-list-create'),
+    path('trips/<int:pk>/', views.TripRetrieveUpdateDestroy.as_view(),
+         name='trip-detail'),
 ]
