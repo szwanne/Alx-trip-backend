@@ -65,6 +65,14 @@ class TripMemberListCreate(generics.ListCreateAPIView):
         return TripMember.objects.all()
 
 
+class TripMemberRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TripMemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return TripMember.objects.all()
+
+
 class TripListCreate(generics.ListCreateAPIView):
     serializer_class = TripSerializer
     permission_classes = [permissions.IsAuthenticated]

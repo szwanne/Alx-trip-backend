@@ -25,4 +25,6 @@ urlpatterns = [
     # Trip members endpoints
     path('trip-members/', views.TripMemberListCreate.as_view(),
          name='trip-members-create-list'),
+    path('trip-members/<int:pk>/',
+         views.TripMemberRetrieveUpdateDestroy.as_view(), name='trip-member-detail'),
 ]
