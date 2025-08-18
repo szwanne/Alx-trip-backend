@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from trip.models import UserProfile
-from trip.models import Trip
+from trip.models import UserProfile, Destination, Trip
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -12,8 +11,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'date_joined']
 
 
+class DestinationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Destination
+        fields = ['id', 'name', 'country', 'description']
+
+
 class TripSerializer(serializers.ModelSerializer):
+    # Nested serializer to show destination details
+    destination = DestinationSerializer(read_only=True)
+    destination_id = serializers.PrimaryKeyRelatedField(
+        queryset=Destination.objects.all(), source='destination', write_only=True)
+
     class Meta:
         model = Trip
-        fields = ['id', 'title', 'destination',
+        fields = ['id', 'destination', 'destination_id',  'title', 'destination',
                   'start_date', 'end_date', 'notes']

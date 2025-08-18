@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Trip
+from .models import UserProfile, Destination, Trip
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -9,9 +9,15 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
 
 
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'country', 'description')
+
+
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
-    list_display = ('title', 'destination', 'start_date', 'end_date', 'user')
+    list_display = ('title', 'destination', 'destination_id',
+                    'start_date', 'end_date', 'user')
     search_fields = ('title', 'destination', 'user__username')
 
 
