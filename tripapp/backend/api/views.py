@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import UserProfileSerializer, TripSerializer, DestinationSerializer
-from trip.models import UserProfile, Trip, Destination
+from .serializers import UserProfileSerializer, ActivitySerializer, TripSerializer, DestinationSerializer, TripMemberSerializer
+from trip.models import UserProfile, Activity, Trip, Destination, TripMember
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
@@ -25,6 +25,22 @@ class UserProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return UserProfile.objects.all()
 
 
+class ActivityListCreate(generics.ListCreateAPIView):
+    serializer_class = ActivitySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Activity.objects.all()
+
+
+class ActivityRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ActivitySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Activity.objects.all()
+
+
 class DestinationListCreate(generics.ListCreateAPIView):
     serializer_class = DestinationSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -39,6 +55,14 @@ class DestinationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Destination.objects.all()
+
+
+class TripMemberListCreate(generics.ListCreateAPIView):
+    serializer_class = TripMemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return TripMember.objects.all()
 
 
 class TripListCreate(generics.ListCreateAPIView):

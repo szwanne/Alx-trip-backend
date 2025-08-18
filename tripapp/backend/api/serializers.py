@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from trip.models import UserProfile, Destination, Trip
+from trip.models import UserProfile, Activity, Destination, TripMember, Trip
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -11,10 +11,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'date_joined']
 
 
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ['id', 'name', 'description', 'date']
+
+
 class DestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Destination
         fields = ['id', 'name', 'country', 'description']
+
+
+class TripMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripMember
+        fields = ['id', 'name', 'email']
 
 
 class TripSerializer(serializers.ModelSerializer):
