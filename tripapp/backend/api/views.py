@@ -33,6 +33,14 @@ class DestinationListCreate(generics.ListCreateAPIView):
         return Destination.objects.all()
 
 
+class DestinationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DestinationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Destination.objects.all()
+
+
 class TripListCreate(generics.ListCreateAPIView):
     serializer_class = TripSerializer
     permission_classes = [permissions.IsAuthenticated]
