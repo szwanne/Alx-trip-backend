@@ -5,9 +5,17 @@ from django.utils import timezone
 # Create your models here.
 
 
+class Booking(models.Model):
+    type = models.CharField(max_length=100)
+    detail = models.TextField(max_length=200, blank=True)
+    booking_date = models.DateTimeField()
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
+    booking = models.ForeignKey(
+        Booking, on_delete=models.CASCADE, related_name="bookings")
 
     def __str__(self):
         return self.user.username

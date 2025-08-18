@@ -1,11 +1,27 @@
 from django.shortcuts import render
-from .serializers import UserProfileSerializer, ActivitySerializer, TripSerializer, DestinationSerializer, TripMemberSerializer
-from trip.models import UserProfile, Activity, Trip, Destination, TripMember
+from .serializers import UserProfileSerializer, ActivitySerializer, TripSerializer, DestinationSerializer, TripMemberSerializer, BookingSerializer
+from trip.models import UserProfile, Activity, Trip, Destination, TripMember, Booking
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
 
 # Create your views here.
+
+class BookingListCreate(generics.ListCreateAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Booking.objects.all()
+
+
+class BookingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Booking.objects.all()
+
 
 class UserProfileListCreate(generics.ListCreateAPIView):
     serializer_class = UserProfileSerializer

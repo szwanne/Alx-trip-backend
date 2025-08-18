@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import UserProfile, Destination, Trip, Activity, TripMember
+from .models import UserProfile, Destination, Trip, Activity, TripMember, Booking
+
+
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ('type', 'detail', 'booking_date')
 
 
 class UserProfileAdmin(admin.ModelAdmin):

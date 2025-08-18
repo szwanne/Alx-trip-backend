@@ -3,6 +3,11 @@ from . import views
 
 
 urlpatterns = [
+    # Bookings endpoints
+    path('bookings/', views.BookingListCreate.as_view(),
+         name='bookings-list-create'),
+    path('bookings/<int:pk>/',
+         views.BookingRetrieveUpdateDestroy.as_view(), name='booking-details'),
     # UserProfile endpoints
     path('profiles/', views.UserProfileListCreate.as_view(),
          name='userprofile-list-create'),
