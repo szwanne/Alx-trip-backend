@@ -3,6 +3,11 @@ from . import views
 
 
 urlpatterns = [
-    path('trips/', views.UserProfileListCreate.as_view()),
-    path('trips/<int:pk>', views.UserProfileRetrieveUpdateDestroy.as_view())
+    # UserProfile endpoints
+    path('profiles/', views.UserProfileListCreate.as_view(),
+         name='userprofile-list-create'),
+    path('profiles/<int:pk>', views.UserProfileRetrieveUpdateDestroy.as_view(),
+         name='userprofile-detail'),
+    # Trip endpoints
+    path('trips/', views.TripListCreate.as_view(), name='trip-list-create')
 ]

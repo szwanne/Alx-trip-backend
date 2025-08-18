@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import UserProfileSerializer
-from trip.models import UserProfile
+from .serializers import UserProfileSerializer, TripSerializer
+from trip.models import UserProfile, Trip
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
@@ -23,3 +23,14 @@ class UserProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         user = self.request.user
         # Only users can only update, delete their profile
         return UserProfile.objects.all()
+
+
+class TripListCreate(generics.ListCreateAPIView):
+    serializer_class = TripSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Trip.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
