@@ -9,6 +9,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate
 
 # Create your views here.
 
@@ -34,6 +35,34 @@ def signup(request):
     else:
         # fallback response
         return JsonResponse({'error': 'Only POST method allowed'}, status=405)
+
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user = authenticate(
+            request,
+            username=data['username'],
+            password=data['password']
+        )
+
+        if user is None:
+            return JsonResponse(
+                {'error': 'Unable to login. Check username and password'},
+                status=400
+            )
+        else:
+            # return user token
+            try:
+                token = Token.objects.get(user=user)
+            except Token.DoesNotExist:  # cleaner than bare except
+                token = Token.objects.create(user=user)
+
+            return JsonResponse({'token': str(token)}, status=201)
+
+    # fallback if request method is not POST
+    return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
 
 class BookingListCreate(generics.ListCreateAPIView):

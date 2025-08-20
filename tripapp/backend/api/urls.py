@@ -35,4 +35,5 @@ urlpatterns = [
          views.TripMemberRetrieveUpdateDestroy.as_view(), name='trip-member-detail'),
     # Auth endpoints
     path('signup/', views.signup),
+    path('login/', views.login),
 ]
