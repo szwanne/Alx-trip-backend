@@ -3,9 +3,38 @@ from .serializers import UserProfileSerializer, ActivitySerializer, TripSerializ
 from trip.models import UserProfile, Activity, Trip, Destination, TripMember, Booking
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-
+from django.db import IntegrityError
+from django.contrib.auth.models import User
+from rest_framework.parsers import JSONParser
+from rest_framework.authtoken.models import Token
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+
+
+@csrf_exempt
+def signup(request):
+    if request.method == 'POST':
+        try:
+            data = JSONParser().parse(request)  # Parse JSON body
+            user = User.objects.create_user(
+                username=data['username'],
+                password=data['password']
+            )
+            user.save()
+            token = Token.objects.create(user=user)
+            # make sure this is indented correctly
+            return JsonResponse({'token': str(token)}, status=201)
+        except IntegrityError:
+            return JsonResponse(
+                {'error': 'username taken. choose another username'},
+                status=400
+            )
+    else:
+        # fallback response
+        return JsonResponse({'error': 'Only POST method allowed'}, status=405)
+
 
 class BookingListCreate(generics.ListCreateAPIView):
     serializer_class = BookingSerializer

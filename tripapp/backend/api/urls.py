@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.urls import path
 from . import views
 
@@ -32,4 +33,6 @@ urlpatterns = [
          name='trip-members-create-list'),
     path('trip-members/<int:pk>/',
          views.TripMemberRetrieveUpdateDestroy.as_view(), name='trip-member-detail'),
+    # Auth endpoints
+    path('signup/', views.signup),
 ]
