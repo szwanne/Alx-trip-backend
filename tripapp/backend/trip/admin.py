@@ -16,12 +16,14 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'date')
+    list_display = ('name', 'destination', 'date', 'image_url')
+    search_fields = ('name',)
 
 
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'country', 'description')
+    list_display = ('name', 'country', 'image_url')
+    search_fields = ('name', 'country')
 
 
 @admin.register(TripMember)

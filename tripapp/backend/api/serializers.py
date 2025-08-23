@@ -47,13 +47,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['id', 'name', 'description', 'date']
+        fields = ['id', 'name', 'description', 'date', 'image_url']
 
 
 class DestinationSerializer(serializers.ModelSerializer):
+    activities = ActivitySerializer(many=True, read_only=True)
+
     class Meta:
         model = Destination
-        fields = ['id', 'name', 'country', 'description']
+        fields = ['id', 'name', 'country',
+                  'description', "activities", 'image_url']
 
 
 class TripMemberSerializer(serializers.ModelSerializer):

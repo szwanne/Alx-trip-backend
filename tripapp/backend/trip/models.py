@@ -22,20 +22,26 @@ class UserProfile(models.Model):
 
 
 class Activity(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    destination = models.ForeignKey("Destination",
+                                    on_delete=models.CASCADE,
+                                    related_name="activities",
+                                    null=True, blank=True)
+
+    name = models.CharField(max_length=100, unique=False)
     description = models.TextField(blank=True)
     date = models.DateTimeField()
+    image_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        dest = self.destination.name if self.destination else "No destination"
+        return f"{self.name} ({dest})"
 
 
 class Destination(models.Model):
     name = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True)
-    activity = models.ForeignKey(
-        Activity, on_delete=models.CASCADE, related_name='activities')
+    image_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.name

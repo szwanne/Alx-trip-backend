@@ -21,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from rest_framework.exceptions import NotFound
 
 
 from rest_framework import generics, permissions
@@ -225,6 +226,22 @@ class DestinationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Destination.objects.all()
+
+
+class DestinationActivitiesList(generics.ListAPIView):
+    """
+    List all activities for a given destination (by destination ID).
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ActivitySerializer
+
+    def get_queryset(self):
+        dest_id = self.kwargs.get("pk")
+        try:
+            destination = Destination.objects.get(pk=dest_id)
+        except Destination.DoesNotExist:
+            raise NotFound({"error": "Destination not found"})
+        return Activity.objects.filter(destination=destination).order_by("-date")
 
 
 # -------------------------------

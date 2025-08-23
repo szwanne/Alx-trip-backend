@@ -24,6 +24,8 @@ urlpatterns = [
          name='destination-list-create'),
     path('destinations/<int:pk>/',
          views.DestinationRetrieveUpdateDestroy.as_view(), name='destination-detail'),
+    path('destinations/<int:pk>/activities/',
+         views.DestinationActivitiesList.as_view(), name='destination-activities'),
     # Trip endpoints
     path('trips/', views.TripListCreate.as_view(), name='trip-list-create'),
     path('trips/<int:pk>/', views.TripRetrieveUpdateDestroy.as_view(),
