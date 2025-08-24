@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
-
+from api import views
 
 urlpatterns = [
     # Bookings endpoints
@@ -36,6 +36,5 @@ urlpatterns = [
     path('trip-members/<int:pk>/',
          views.TripMemberRetrieveUpdateDestroy.as_view(), name='trip-member-detail'),
     # Auth endpoints
-    path('signup/', views.signup),
-    path('login/', views.login),
+    path('api/signup/', views.signup, name="signup"),
 ]

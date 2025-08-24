@@ -22,11 +22,17 @@ from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 
 from rest_framework import generics, permissions
 from rest_framework.parsers import JSONParser
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from .serializers import (
@@ -47,73 +53,26 @@ from trip.models import (
 )
 
 
-# -------------------------------
-# Authentication Views
-# -------------------------------
+# # -------------------------------
+# # Authentication Views
+# # -------------------------------
 
-@csrf_exempt
+@api_view(['POST', 'PUT'])
+@permission_classes([AllowAny])  # anyone can sign up
 def signup(request):
     """
-    User signup endpoint.
-    Method: POST
-    Body: { "username": "<username>", "password": "<password>" }
-    Returns: JSON { "token": "<auth_token>" }
-
-    Creates a new user and generates an authentication token.
+    Create a new user account
     """
-    if request.method == 'POST':
-        try:
-            data = JSONParser().parse(request)  # Parse JSON body
-            user = User.objects.create_user(
-                username=data['username'],
-                password=data['password']
-            )
-            user.save()
-
-            # Generate token for new user
-            token = Token.objects.create(user=user)
-
-            return JsonResponse({'token': str(token)}, status=201)
-
-        except IntegrityError:
-            return JsonResponse(
-                {'error': 'Username already taken. Choose another one.'},
-                status=400
-            )
-
-    return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-
-
-@csrf_exempt
-def login(request):
-    """
-    User login endpoint.
-    Method: POST
-    Body: { "username": "<username>", "password": "<password>" }
-    Returns: JSON { "token": "<auth_token>" }
-
-    Authenticates a user and returns their token.
-    If token does not exist, creates a new one.
-    """
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        user = authenticate(
-            request,
+    data = request.data
+    try:
+        user = User.objects.create_user(
             username=data['username'],
             password=data['password']
         )
-
-        if user is None:
-            return JsonResponse(
-                {'error': 'Unable to login. Check username and password.'},
-                status=400
-            )
-
-        # Fetch or create token
-        token, created = Token.objects.get_or_create(user=user)
-        return JsonResponse({'token': str(token)}, status=200)
-
-    return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+        user.save()
+        return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+    except IntegrityError:
+        return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # -------------------------------
