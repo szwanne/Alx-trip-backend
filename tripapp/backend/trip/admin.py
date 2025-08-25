@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Destination, Trip, Activity, TripMember, Booking, FlightOffer
+from .models import UserProfile, Destination, Trip, Activity, TripMember, Booking, FlightOffer, Hotel, Weather
 
 
 @admin.register(Booking)
@@ -28,6 +28,14 @@ class FlightOfferAdmin(admin.ModelAdmin):
                      'departure_time', 'arrival_time', 'price')
 
 
+@admin.register(Hotel)
+class HotelAdmin(admin.ModelAdmin):
+    list_display = ('name', 'location', 'check_in_date',
+                    'check_out_date', 'price_per_night', 'rating')
+    search_fields = ('name', 'location', 'check_in_date',
+                     'check_out_date', 'price_per_night')
+
+
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
     list_display = ('name', 'country', 'image_url')
@@ -44,6 +52,11 @@ class TripAdmin(admin.ModelAdmin):
     list_display = ('title', 'destination', 'destination_id',
                     'start_date', 'end_date', 'user')
     search_fields = ('title', 'destination', 'user__username')
+
+
+@admin.register(Weather)
+class WeatherAdmin(admin.ModelAdmin):
+    list_display = ('location', 'date', 'condition', 'temperature')
 
 
 # Register your models here.

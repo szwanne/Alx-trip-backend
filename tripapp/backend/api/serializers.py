@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from trip.models import UserProfile, Activity, Destination, TripMember, Trip, Booking, FlightOffer
+from trip.models import UserProfile, Activity, Destination, TripMember, Trip, Booking, FlightOffer, Hotel, Weather
 from django.contrib.auth.password_validation import validate_password
 
 
@@ -57,6 +57,13 @@ class FlightOfferSerializer(serializers.ModelSerializer):
                   'arrival_airport', 'departure_time', 'arrival_time', 'cabin_class', 'price']
 
 
+class HotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hotel
+        fields = ['id', 'name', 'location', 'check_in_date',
+                  'check_out_date', 'price_per_night', 'rating']
+
+
 class DestinationSerializer(serializers.ModelSerializer):
     activities = ActivitySerializer(many=True, read_only=True)
 
@@ -82,3 +89,9 @@ class TripSerializer(serializers.ModelSerializer):
         model = Trip
         fields = ['id', 'destination', 'destination_id',  'title', 'destination',
                   'start_date', 'end_date', 'notes']
+
+
+class WeatherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weather
+        fields = ['id', 'location', 'date', 'temperature', 'condition']

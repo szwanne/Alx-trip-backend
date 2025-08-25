@@ -42,7 +42,9 @@ from .serializers import (
     DestinationSerializer,
     TripMemberSerializer,
     BookingSerializer,
-    FlightOfferSerializer
+    FlightOfferSerializer,
+    HotelSerializer,
+    WeatherSerializer
 )
 from trip.models import (
     UserProfile,
@@ -51,7 +53,9 @@ from trip.models import (
     Destination,
     TripMember,
     Booking,
-    FlightOffer
+    FlightOffer,
+    Hotel,
+    Weather
 )
 
 
@@ -192,6 +196,36 @@ class FlightOfferRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 # -------------------------------
+# Hotel Views
+# -------------------------------
+
+class HotelListCreate(generics.ListCreateAPIView):
+    """
+    List all destinations or create a new one.
+    Requires authentication.
+    """
+    serializer_class = HotelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Hotel.objects.all()
+
+
+class HotelRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a flightoffer by ID.
+    Requires authentication.
+    """
+
+    serializer_class = HotelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Restrict access to the logged-in user’s flightOffer
+        return Hotel.objects.filter(user=self.request.user)
+
+
+# -------------------------------
 # Destination Views
 # -------------------------------
 
@@ -295,3 +329,32 @@ class TripRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         # Restrict access to the logged-in user’s trips
         return Trip.objects.filter(user=self.request.user)
+
+
+# -------------------------------
+# Weather Views
+# -------------------------------
+
+class WeatherListCreate(generics.ListCreateAPIView):
+    """
+    List all weather or create a new one.
+    Requires authentication.
+    """
+    serializer_class = WeatherSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Weather.objects.all()
+
+
+class WeatherRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a trip by ID.
+    Only available for the authenticated user’s own trips.
+    """
+    serializer_class = WeatherSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Restrict access to the logged-in user’s weather
+        return Weather.objects.all()

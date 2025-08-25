@@ -51,6 +51,15 @@ class FlightOffer(models.Model):
         return f"{self.airline} {self.flight_number} ({self.departure_airport} > {self.arrival_airport})"
 
 
+class Hotel(models.Model):
+    name = models.CharField(max_length=200)
+    location = models.CharField(max_length=200)
+    check_in_date = models.DateField()
+    check_out_date = models.DateField()
+    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    rating = models.FloatField(blank=True, null=True)
+
+
 class Destination(models.Model):
     name = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -59,6 +68,9 @@ class Destination(models.Model):
     flightoffer = models.ForeignKey(FlightOffer, on_delete=models.CASCADE,
                                     related_name="flightoffers",
                                     null=True, blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE,
+                              related_name="hotels",
+                              null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -86,3 +98,13 @@ class Trip(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - ({self.destination.name})"
+
+
+class Weather(models.Model):
+    location = models.CharField(max_length=200)
+    date = models.DateField()
+    temperature = models.FloatField()
+    condition = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.location} {self.date} - {self.condition}"

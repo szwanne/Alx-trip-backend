@@ -24,6 +24,11 @@ urlpatterns = [
          name='flightoffer-details'),
     path('flightoffers/<int:pk>/',
          views.FlightOfferRetrieveUpdateDestroy.as_view(), name='flightoffers-detail'),
+    # Hotel endpoints
+    path('hotels/', views.HotelListCreate.as_view(),
+         name='hotel-lists'),
+    path('hotels/<int:pk>/', views.HotelRetrieveUpdateDestroy.as_view(),
+         name='hotel-detail'),
     # Destinations endpoints
     path('destinations/', views.DestinationListCreate.as_view(),
          name='destination-list-create'),
@@ -42,4 +47,9 @@ urlpatterns = [
          views.TripMemberRetrieveUpdateDestroy.as_view(), name='trip-member-detail'),
     # Auth endpoints
     path('api/signup/', views.signup, name="signup"),
+    # Weather endpoints
+    path('weather/', views.WeatherListCreate.as_view(),
+         name='weather-list-create'),
+    path('weather/<int:pk>/',
+         views.WeatherRetrieveUpdateDestroy.as_view(), name='weather-detail'),
 ]
