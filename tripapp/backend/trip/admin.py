@@ -31,7 +31,7 @@ class FlightOfferAdmin(admin.ModelAdmin):
 @admin.register(Hotel)
 class HotelAdmin(admin.ModelAdmin):
     list_display = ('name', 'location', 'check_in_date',
-                    'check_out_date', 'price_per_night', 'rating')
+                    'check_out_date', 'price_per_night', 'rating', 'image_url')
     search_fields = ('name', 'location', 'check_in_date',
                      'check_out_date', 'price_per_night')
 

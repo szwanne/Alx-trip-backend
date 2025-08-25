@@ -54,6 +54,7 @@ class FlightOffer(models.Model):
 class Hotel(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
@@ -64,7 +65,7 @@ class Destination(models.Model):
     name = models.CharField(max_length=100, unique=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True)
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
     flightoffer = models.ForeignKey(FlightOffer, on_delete=models.CASCADE,
                                     related_name="flightoffers",
                                     null=True, blank=True)
