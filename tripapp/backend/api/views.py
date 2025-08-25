@@ -44,7 +44,9 @@ from .serializers import (
     BookingSerializer,
     FlightOfferSerializer,
     HotelSerializer,
-    WeatherSerializer
+    WeatherSerializer,
+    ItinerarySerializer,
+    ItineraryItemSerializer
 )
 from trip.models import (
     UserProfile,
@@ -55,7 +57,9 @@ from trip.models import (
     Booking,
     FlightOffer,
     Hotel,
-    Weather
+    Weather,
+    Itinerary,
+    ItineraryItem
 )
 
 
@@ -358,3 +362,61 @@ class WeatherRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         # Restrict access to the logged-in user’s weather
         return Weather.objects.all()
+
+
+# -------------------------------
+# Itinerary Views
+# -------------------------------
+
+class ItineraryListCreate(generics.ListCreateAPIView):
+    """
+    List all weather or create a new one.
+    Requires authentication.
+    """
+    serializer_class = ItinerarySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Itinerary.objects.all()
+
+
+class ItineraryRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a trip by ID.
+    Only available for the authenticated user’s own trips.
+    """
+    serializer_class = ItinerarySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Restrict access to the logged-in user’s weather
+        return Itinerary.objects.all()
+
+
+# -------------------------------
+# ItineraryItem Views
+# -------------------------------
+
+class ItineraryItemListCreate(generics.ListCreateAPIView):
+    """
+    List all weather or create a new one.
+    Requires authentication.
+    """
+    serializer_class = ItineraryItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ItineraryItem.objects.all()
+
+
+class ItineraryItemRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a trip by ID.
+    Only available for the authenticated user’s own trips.
+    """
+    serializer_class = ItineraryItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Restrict access to the logged-in user’s weather
+        return ItineraryItem.objects.all()

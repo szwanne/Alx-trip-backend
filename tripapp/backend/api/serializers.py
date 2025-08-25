@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from trip.models import UserProfile, Activity, Destination, TripMember, Trip, Booking, FlightOffer, Hotel, Weather
+from trip.models import UserProfile, Activity, Destination, TripMember, Trip, Booking, FlightOffer, Hotel, Weather, Itinerary, ItineraryItem
 from django.contrib.auth.password_validation import validate_password
 
 
@@ -95,3 +95,17 @@ class WeatherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weather
         fields = ['id', 'location', 'date', 'temperature', 'condition']
+
+
+class ItinerarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Itinerary
+        fields = ['id', 'user', 'name', 'start_date',
+                  'end_date', 'flight_offer', 'hotel']
+
+
+class ItineraryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItineraryItem
+        fields = ['id', 'itinerary', 'title', 'description',
+                  'date', 'start_time', 'end_time', 'location']

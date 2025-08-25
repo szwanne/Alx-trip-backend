@@ -108,3 +108,32 @@ class Weather(models.Model):
 
     def __str__(self):
         return f"{self.location} {self.date} - {self.condition}"
+
+
+class Itinerary(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="itineraries")
+    name = models.CharField(max_length=200)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    flight_offer = models.ForeignKey(
+        FlightOffer, on_delete=models.SET_NULL, null=True, blank=True)
+    hotel = models.ForeignKey(
+        Hotel, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Itinerary: {self.name} ({self.start_date} > {self.end_date})"
+
+
+class ItineraryItem(models.Model):
+    itinerary = models.ForeignKey(
+        Itinerary, on_delete=models.CASCADE, related_name="items")
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    date = models.DateField()
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title} on {self.date}"

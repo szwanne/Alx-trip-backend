@@ -52,4 +52,14 @@ urlpatterns = [
          name='weather-list-create'),
     path('weather/<int:pk>/',
          views.WeatherRetrieveUpdateDestroy.as_view(), name='weather-detail'),
+    # Itinerary endpoints
+    path('itinerary/', views.ItineraryListCreate.as_view(),
+         name='itinerary-list-create'),
+    path('itinerary/<int:pk>/',
+         views.ItineraryRetrieveUpdateDestroy.as_view(), name='itinerary-detail'),
+    # ItineraryItem endpoints
+    path('itineraryitems/', views.ItineraryItemListCreate.as_view(),
+         name='itineraryitems-list-create'),
+    path('itineraryitems/<int:pk>/',
+         views.ItineraryItemRetrieveUpdateDestroy.as_view(), name='itineraryitems-detail')
 ]
