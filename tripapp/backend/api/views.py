@@ -41,7 +41,8 @@ from .serializers import (
     TripSerializer,
     DestinationSerializer,
     TripMemberSerializer,
-    BookingSerializer
+    BookingSerializer,
+    FlightOfferSerializer
 )
 from trip.models import (
     UserProfile,
@@ -49,7 +50,8 @@ from trip.models import (
     Trip,
     Destination,
     TripMember,
-    Booking
+    Booking,
+    FlightOffer
 )
 
 
@@ -157,6 +159,36 @@ class ActivityRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Activity.objects.all()
+
+
+# -------------------------------
+# FlightOffer Views
+# -------------------------------
+
+class FlightOfferListCreate(generics.ListCreateAPIView):
+    """
+    List all avail flight offers or can create a new one.
+    Requires authentication.
+    """
+    serializer_class = FlightOfferSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return FlightOffer.objects.all()
+
+
+class FlightOfferRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a flightoffer by ID.
+    Requires authentication.
+    """
+
+    serializer_class = FlightOfferSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Restrict access to the logged-in user’s flightOffer
+        return FlightOffer.objects.filter(user=self.request.user)
 
 
 # -------------------------------

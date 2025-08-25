@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Destination, Trip, Activity, TripMember, Booking
+from .models import UserProfile, Destination, Trip, Activity, TripMember, Booking, FlightOffer
 
 
 @admin.register(Booking)
@@ -18,6 +18,14 @@ class UserProfileAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('name', 'destination', 'date', 'image_url')
     search_fields = ('name',)
+
+
+@admin.register(FlightOffer)
+class FlightOfferAdmin(admin.ModelAdmin):
+    list_display = ('airline', 'flight_number', 'departure_airport',
+                    'arrival_airport', 'departure_time', 'arrival_time', 'cabin_class', 'price')
+    search_fields = ('flight_number', 'arrival_airport',
+                     'departure_time', 'arrival_time', 'price')
 
 
 @admin.register(Destination)

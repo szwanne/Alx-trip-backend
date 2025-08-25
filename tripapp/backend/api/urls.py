@@ -19,6 +19,11 @@ urlpatterns = [
          name='activity-list-create'),
     path('activity/<int:pk>/',
          views.ActivityRetrieveUpdateDestroy.as_view(), name='activity-detail'),
+    # FlightOffer endpoints
+    path('flightoffers/', views.FlightOfferListCreate.as_view(),
+         name='flightoffer-details'),
+    path('flightoffers/<int:pk>/',
+         views.FlightOfferRetrieveUpdateDestroy.as_view(), name='flightoffers-detail'),
     # Destinations endpoints
     path('destinations/', views.DestinationListCreate.as_view(),
          name='destination-list-create'),
