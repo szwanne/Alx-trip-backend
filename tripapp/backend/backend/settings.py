@@ -14,6 +14,8 @@ from pathlib import Path
 import dj_database_url
 import os
 from decouple import config
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,21 +89,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Default DATABASES setting (will be overwritten below)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'Siyabonga1*',  # <-- replace with your local Postgres password
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
 
 # Determine environment
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
+    # Heroku automatically sets DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -109,12 +102,18 @@ if DJANGO_ENV == "production":
         )
     }
 else:
+    # Local Postgres
     DATABASES = {
-        'default': dj_database_url.config(
-            default="postgres://postgres:Siyabonga1*d@localhost:5432/postgres",
-            conn_max_age=600
-        )
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("POSTGRES_DB", "trip_planner_db"),
+            'USER': os.getenv("POSTGRES_USER", "postgres"),
+            'PASSWORD': os.getenv("POSTGRES_PASSWORD", ""),
+            'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+            'PORT': os.getenv("POSTGRES_PORT", "5432"),
+        }
     }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
