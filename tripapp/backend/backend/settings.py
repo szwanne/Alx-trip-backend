@@ -177,5 +177,6 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",            # local React dev
-    "https://your-react-app.vercel.app"  # production React
+    "https://your-react-app.vercel.app",
+    'https://localhost'  # production React
 ]
