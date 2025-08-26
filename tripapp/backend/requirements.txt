@@ -37,3 +37,11 @@ tkcalendar==1.6.1
 typing_extensions==4.14.1
 uritemplate==4.2.0
 urllib3==2.5.0
+Django>=4.2
+djangorestframework
+gunicorn
+psycopg2-binary
+dj-database-url
+python-decouple
+whitenoise
+django-cors-headers
