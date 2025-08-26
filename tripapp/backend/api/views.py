@@ -46,7 +46,8 @@ from .serializers import (
     HotelSerializer,
     WeatherSerializer,
     ItinerarySerializer,
-    ItineraryItemSerializer
+    ItineraryItemSerializer,
+    RegisterSerializer
 )
 from trip.models import (
     UserProfile,
@@ -83,6 +84,10 @@ def signup(request):
         return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
     except IntegrityError:
         return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RegisterView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
 
 
 # -------------------------------
