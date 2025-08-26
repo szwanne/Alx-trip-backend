@@ -33,7 +33,13 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 
-ALLOWED_HOSTS = ['trip-planner-81608bb83021.herokuapp.com']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(
+    ',')  # get from env variable
+
+# For local development fallback
+if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                     'trip-planner-81608bb83021.herokuapp.com']
 
 
 # Application definition
