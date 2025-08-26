@@ -4,8 +4,6 @@ from . import views
 from api import views
 
 urlpatterns = [
-    # Register endpoints
-    path('register/', views.RegisterView.as_view(), name='register'),
     # Bookings endpoints
     path('bookings/', views.BookingListCreate.as_view(),
          name='bookings-list-create'),

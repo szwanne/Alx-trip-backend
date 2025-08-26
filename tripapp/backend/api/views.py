@@ -85,14 +85,10 @@ def signup(request):
     except IntegrityError:
         return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
-
-
 # -------------------------------
 # Booking Views
 # -------------------------------
+
 
 class BookingListCreate(generics.ListCreateAPIView):
     """

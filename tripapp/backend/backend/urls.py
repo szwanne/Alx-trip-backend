@@ -34,7 +34,6 @@ def home(request):
 urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
-    path('api/', include('users.urls')),
     path('api/', include('api.urls')),
     # Swagger/OpenAPI documentation
     path('swagger/', schema_view.with_ui('swagger',
