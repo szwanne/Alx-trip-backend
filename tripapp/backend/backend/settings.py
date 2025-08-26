@@ -102,15 +102,16 @@ DATABASES = {
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
-    # Use Heroku Postgres
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
-else:
-    # Local Postgres fallback
     DATABASES = {
         'default': dj_database_url.config(
-            default="DATABASE_URL",
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default="postgres://postgres:Siyabonga1*d@localhost:5432/postgres",
             conn_max_age=600
         )
     }
