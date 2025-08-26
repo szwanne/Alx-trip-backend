@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
 from api import views
 from rest_framework import permissions
@@ -26,7 +27,12 @@ from .swagger import schema_view  # import the schema_view we just created
 from drf_yasg import openapi
 
 
+def home(request):
+    return JsonResponse({"message": "Welcome to Trip Planner API!"})
+
+
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     # Swagger/OpenAPI documentation
