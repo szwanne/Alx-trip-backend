@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
 from decouple import config
 
 
@@ -85,15 +86,34 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Default DATABASES setting (will be overwritten below)
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True  # Force SSL on Heroku
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Siyabonga1*',  # <-- replace with your local Postgres password
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
+# Determine environment
+DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
+if DJANGO_ENV == "production":
+    # Use Heroku Postgres
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    }
+else:
+    # Local Postgres fallback
+    DATABASES = {
+        'default': dj_database_url.config(
+            default="DATABASE_URL",
+            conn_max_age=600
+        )
+    }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
