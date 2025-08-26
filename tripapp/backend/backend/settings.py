@@ -26,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -35,12 +36,6 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(
     ',')  # get from env variable
-
-# For local development fallback
-if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-                     'trip-planner-81608bb83021.herokuapp.com']
-
 
 # Application definition
 
@@ -97,6 +92,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Default DATABASES setting (will be overwritten below)
 
 # Determine environment
+
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
@@ -119,6 +115,15 @@ else:
             'PORT': os.getenv("POSTGRES_PORT", "5432"),
         }
     }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=f"postgres://postgres:{os.environ.get('DB_PASSWORD')}@localhost:5432/trip_planner_db",
+#         conn_max_age=600,
+#         ssl_require=os.environ.get('DJANGO_ENV') == 'production'
+#     )
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -180,6 +185,11 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),  # instead of default ("JWT",)
 }
+
+
+# Heroku SSL redirect (optional)
+if os.environ.get('DJANGO_ENV') == 'production':
+    SECURE_SSL_REDIRECT = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",            # local React dev
