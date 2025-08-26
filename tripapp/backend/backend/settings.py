@@ -30,7 +30,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 
-ALLOWED_HOSTS = ['trip-planner.herokuapp.com']
+ALLOWED_HOSTS = ['trip-planner-81608bb83021.herokuapp.com']
 
 
 # Application definition
