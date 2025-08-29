@@ -99,8 +99,7 @@ if DJANGO_ENV == "production":
     # Heroku automatically sets DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
+            default=os.getenv("DATABASE_URL")
         )
     }
 else:
