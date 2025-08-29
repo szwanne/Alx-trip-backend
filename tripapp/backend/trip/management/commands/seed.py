@@ -9,7 +9,7 @@ from trip.models import (
 from faker import Faker
 
 fake = Faker()
-UNSPLASH_IMAGES_HOTEL = [
+HOTEL_IMAGES = [
     "https://images.unsplash.com/photo-1559599101-b8b6b2c8f3b3",
     "https://images.unsplash.com/photo-1501117716987-c8e1ecb210f3",
     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
@@ -59,7 +59,7 @@ UNSPLASH_IMAGES_HOTEL = [
     "https://images.unsplash.com/photo-1541872703-141b11203f36",
     "https://images.unsplash.com/photo-1533577116850-9cc66cad8a9b",
     "https://images.unsplash.com/photo-1524524152507-9d1740ebd4a1",
-    "https://images.unsplash.com/photo-1523473827538-0c7f3dc6597b", "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+    "https://images.unsplash.com/photo-1523473827538-0c7f3dc6597b",
     "https://images.unsplash.com/photo-1568495248636-643574b29b46",
     "https://images.unsplash.com/photo-1501117716987-c8e2eaa7a034",
     "https://images.unsplash.com/photo-1560448204-5f3f9d6b4e1a",
@@ -82,7 +82,7 @@ UNSPLASH_IMAGES_HOTEL = [
 
 ]
 
-UNSPLASH_IMAGES_ACTIVITY = [
+ACTIVITY_IMAGES = [
     "https://images.unsplash.com/photo-1520975918318-8c6b3ce04899",
     "https://images.unsplash.com/photo-1508973372-2d0b7b1f80ef",
     "https://images.unsplash.com/photo-1472653431158-6364773b2a56",
@@ -170,7 +170,7 @@ UNSPLASH_IMAGES_ACTIVITY = [
     "https://images.unsplash.com/photo-1523473827538-0c7f3dc6597b"
 ]
 
-UNSPLASH_IMAGES_DESTINATION = [
+DESTINATION_IMAGES = [
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
@@ -254,9 +254,18 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write("Seeding data...")
 
-        # ✅ Users
-        users = []
-        for i in range(10):
+        # ✅ Ensure test user exists
+        test_user, created = User.objects.get_or_create(
+            username="siphozwane", defaults={"email": "szwanne1@gmail.com"}
+        )
+        if created:
+            test_user.set_password("Siyabonga1*")
+            test_user.save()
+
+        users = [test_user]
+
+        # ✅ Create some random additional users
+        for i in range(9):
             user, created = User.objects.get_or_create(
                 username=fake.user_name() + str(i),
                 defaults={"email": fake.email()}
@@ -267,7 +276,6 @@ class Command(BaseCommand):
             users.append(user)
 
         # ✅ Bookings + UserProfiles
-        bookings = []
         for user in users:
             booking = Booking.objects.create(
                 type=random.choice(["Flight", "Hotel", "Activity"]),
@@ -275,7 +283,6 @@ class Command(BaseCommand):
                 booking_date=fake.date_time_this_year()
             )
             UserProfile.objects.get_or_create(user=user, booking=booking)
-            bookings.append(booking)
 
         # ✅ Flights
         flights = []
@@ -293,38 +300,38 @@ class Command(BaseCommand):
 
         # ✅ Hotels
         hotels = []
-        for _ in range(20):
+        for i in range(len(HOTEL_IMAGES)):
             hotels.append(Hotel.objects.create(
                 name=fake.company(),
                 location=fake.city(),
-                image_url=random.choice(UNSPLASH_IMAGES_HOTEL),
+                image_url=HOTEL_IMAGES[i],
                 check_in_date=date.today(),
                 check_out_date=date.today() + timedelta(days=random.randint(1, 10)),
                 price_per_night=round(random.uniform(50, 500), 2),
                 rating=random.uniform(2, 5),
             ))
 
-        # ✅ Destinations
+        # ✅ Destinations (assign some to test_user)
         destinations = []
-        for _ in range(15):
+        for i in range(len(DESTINATION_IMAGES)):
             destinations.append(Destination.objects.create(
-                name=fake.city(),
+                name=fake.city() + f" {i}",
                 country=fake.country(),
                 description=fake.text(),
-                image_url=random.choice(UNSPLASH_IMAGES_DESTINATION),
+                image_url=DESTINATION_IMAGES[i],
                 flightoffer=random.choice(flights),
                 hotel=random.choice(hotels)
             ))
 
-        # ✅ Activities
-        for dest in destinations:
-            for _ in range(3):
+        # ✅ Activities (assign some to destinations)
+        for idx, dest in enumerate(destinations):
+            for j in range(3):
                 Activity.objects.create(
                     destination=dest,
                     name=fake.word().title(),
                     description=fake.sentence(),
                     date=fake.date_time_this_year(),
-                    image_url=random.choice(UNSPLASH_IMAGES_ACTIVITY),
+                    image_url=random.choice(ACTIVITY_IMAGES),
                 )
 
         # ✅ Trip Members
@@ -335,11 +342,21 @@ class Command(BaseCommand):
                 email=fake.unique.email()
             ))
 
-        # ✅ Trips
-        trips = []
-        for user in users:
-            for _ in range(2):
-                trips.append(Trip.objects.create(
+        # ✅ Trips for test_user + other users
+        for _ in range(15):  # 15 trips for siphozwane
+            Trip.objects.create(
+                user=test_user,
+                trip_member=random.choice(members),
+                title=fake.sentence(nb_words=3),
+                destination=random.choice(destinations),
+                start_date=date.today(),
+                end_date=date.today() + timedelta(days=random.randint(3, 14)),
+                notes=fake.text(),
+            )
+
+        for user in users[1:]:
+            for _ in range(15):
+                Trip.objects.create(
                     user=user,
                     trip_member=random.choice(members),
                     title=fake.sentence(nb_words=3),
@@ -347,42 +364,6 @@ class Command(BaseCommand):
                     start_date=date.today(),
                     end_date=date.today() + timedelta(days=random.randint(3, 14)),
                     notes=fake.text(),
-                ))
-
-        # ✅ Weather
-        for dest in destinations:
-            for _ in range(5):
-                Weather.objects.create(
-                    location=dest.name,
-                    date=date.today() + timedelta(days=random.randint(0, 7)),
-                    temperature=random.uniform(10, 35),
-                    condition=random.choice(
-                        ["Sunny", "Rainy", "Cloudy", "Stormy"])
-                )
-
-        # ✅ Itineraries
-        itineraries = []
-        for user in users:
-            itinerary = Itinerary.objects.create(
-                user=user,
-                name=f"{user.username}'s Trip",
-                start_date=date.today(),
-                end_date=date.today() + timedelta(days=5),
-                flight_offer=random.choice(flights),
-                hotel=random.choice(hotels),
-            )
-            itineraries.append(itinerary)
-
-            # ✅ Itinerary Items
-            for _ in range(3):
-                ItineraryItem.objects.create(
-                    itinerary=itinerary,
-                    title=fake.sentence(nb_words=3),
-                    description=fake.text(),
-                    date=date.today() + timedelta(days=random.randint(0, 5)),
-                    start_time=datetime.now().time(),
-                    end_time=datetime.now().time(),
-                    location=fake.city()
                 )
 
         self.stdout.write(self.style.SUCCESS(

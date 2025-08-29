@@ -316,7 +316,7 @@ class TripListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Only return trips belonging to the logged-in user
-        return Trip.objects.filter(user=self.request.user)
+        return Trip.objects.filter(user=self.request.user).order_by('-start_date')
 
     def perform_create(self, serializer):
         # Ensure the trip is linked to the logged-in user
@@ -333,7 +333,7 @@ class TripRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         # Restrict access to the logged-in user’s trips
-        return Trip.objects.filter(user=self.request.user)
+        return Trip.objects.filter(user=self.request.user).order_by('-start_date')
 
 
 # -------------------------------
