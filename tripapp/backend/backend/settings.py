@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Default DATABASES setting (will be overwritten below)
 
-# Determine environment
+# Determine environment(s)
 
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
@@ -109,11 +109,14 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv("POSTGRES_DB", "trip_planner_db"),
-            'USER': os.getenv("POSTGRES_USER", "postgres"),
-            'PASSWORD': os.getenv("POSTGRES_PASSWORD", ""),
-            'HOST': os.getenv("POSTGRES_HOST", "localhost"),
-            'PORT': os.getenv("POSTGRES_PORT", "5432"),
+            'NAME': 'postgres',
+            'USER': 'postgres.dyaprlqbhfntyvdjdzoi',
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': 'aws-1-us-east-2.pooler.supabase.com',
+            'PORT': '6543',
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
         }
     }
 
