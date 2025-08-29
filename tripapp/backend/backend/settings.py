@@ -27,15 +27,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(
-    ',')  # get from env variable
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    os.environ.get('RENDER_EXTERNAL_HOSTNAME', 'alx-trip-backend.onrender.com')
+]
 
 # Application definition
 
@@ -96,7 +98,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
-    # Heroku automatically sets DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
@@ -105,7 +106,6 @@ if DJANGO_ENV == "production":
         )
     }
 else:
-    # Local Postgres
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -193,8 +193,8 @@ if os.environ.get('DJANGO_ENV') == 'production':
     SECURE_SSL_REDIRECT = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # local React dev
+    "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://your-react-app.vercel.app",
-    'https://localhost'  # production React
+    'https://localhost'
 ]
