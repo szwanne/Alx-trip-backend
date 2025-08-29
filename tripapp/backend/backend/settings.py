@@ -102,7 +102,7 @@ if DJANGO_ENV == "production":
         'default': dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=True  # Must be True for Supabase
         )
     }
 else:
@@ -110,12 +110,12 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'postgres',
-            'USER': 'postgres.dyaprlqbhfntyvdjdzoi',
+            'USER': 'postgres',  # Just the username
             'PASSWORD': os.getenv("DB_PASSWORD"),
             'HOST': 'aws-1-us-east-2.pooler.supabase.com',
             'PORT': '6543',
             'OPTIONS': {
-                'sslmode': 'require',
+                'sslmode': 'require',  # Force SSL
             },
         }
     }
