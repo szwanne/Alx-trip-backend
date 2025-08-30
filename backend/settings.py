@@ -33,8 +33,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", ".up.railway.app,localhost,127.0.0.1").split(",")
+# ALLOWED_HOSTS = os.getenv(
+#     "ALLOWED_HOSTS", ".up.railway.app,localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     f"https://{h}" for h in ALLOWED_HOSTS if ".up.railway.app" in h]
 
@@ -136,13 +137,38 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv("POSTGRES_DB", "trip_planner_db"),
-            'USER': os.getenv("POSTGRES_USER", "postgres"),
-            'PASSWORD': os.getenv("POSTGRES_PASSWORD", ""),
-            'HOST': os.getenv("POSTGRES_HOST", "localhost"),
-            'PORT': os.getenv("POSTGRES_PORT", "5432"),
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': os.getenv("DB_PORT"),
         }
     }
+
+
+# DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+
+# if DJANGO_ENV == "production":
+#     # Heroku automatically sets DATABASE_URL
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             conn_max_age=600,
+#             ssl_require=True
+#         )
+#     }
+# else:
+#     # Local Postgres
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.getenv("POSTGRES_DB", "trip_planner_db"),
+#             'USER': os.getenv("POSTGRES_USER", "postgres"),
+#             'PASSWORD': os.getenv("POSTGRES_PASSWORD", ""),
+#             'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+#             'PORT': os.getenv("POSTGRES_PORT", "5432"),
+#         }
+#     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
