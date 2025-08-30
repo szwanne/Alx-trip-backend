@@ -247,7 +247,7 @@ if os.environ.get('DJANGO_ENV') == 'production':
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://your-react-app.vercel.app",
+    "https://alx-trip-planner.vercel.app",
     'https://localhost'
 ]
 
