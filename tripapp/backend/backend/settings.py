@@ -192,8 +192,8 @@ SIMPLE_JWT = {
 
 
 # Heroku SSL redirect (optional)
-if os.environ.get('DJANGO_ENV') == 'production':
-    SECURE_SSL_REDIRECT = True
+# if os.environ.get('DJANGO_ENV') == 'production':
+#     SECURE_SSL_REDIRECT = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
