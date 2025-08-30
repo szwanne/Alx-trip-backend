@@ -35,9 +35,17 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ALLOWED_HOSTS = os.getenv(
 #     "ALLOWED_HOSTS", ".up.railway.app,localhost,127.0.0.1").split(",")
-ALLOWED_HOSTS = ["*"]
-# CSRF_TRUSTED_ORIGINS = [
-#     f"https://{h}" for h in ALLOWED_HOSTS if ".up.railway.app" in h]
+# ALLOWED_HOSTS = ["*"]
+
+ALLOWED_HOSTS = [
+    "alx-trip-backend-production.up.railway.app",
+    "127.0.0.1",
+    "localhost"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://alx-trip-backend-production.up.railway.app"
+]
 
 # Application definition
 
