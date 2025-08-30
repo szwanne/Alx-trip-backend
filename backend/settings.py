@@ -33,11 +33,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME', 'alx-trip-backend.onrender.com')
-]
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS", ".up.railway.app,localhost,127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{h}" for h in ALLOWED_HOSTS if ".up.railway.app" in h]
 
 # Application definition
 
@@ -95,28 +94,53 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Determine environment(s)
 
+# DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+
+# if DJANGO_ENV == "production":
+#     DATABASES = {
+#         "default": dj_database_url.config(
+#             default=os.getenv("DATABASE_URL"),
+#             conn_max_age=600,
+#             ssl_require=True,
+#         )
+#     }
+# else:
+#     # Local development (Supabase/PostgreSQL)
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": os.getenv("DB_NAME", "trip_planner_db"),
+#             "USER": os.getenv("DB_USER", "postgres"),
+#             "PASSWORD": os.getenv("DB_PASSWORD", ""),
+#             "HOST": os.getenv("DB_HOST", "localhost"),
+#             "PORT": os.getenv("DB_PORT", "5432"),
+#             "OPTIONS": {
+#                 "sslmode": "require",
+#             },
+#         }
+#     }
+
+
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
+    # Heroku automatically sets DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.getenv("DATABASE_URL"),
             conn_max_age=600,
-            ssl_require=True  # Must be True for Supabase
+            ssl_require=True
         )
     }
 else:
+    # Local Postgres
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',  # Just the username
-            'PASSWORD': os.getenv("DB_PASSWORD"),
-            'HOST': 'aws-1-us-east-2.pooler.supabase.com',
-            'PORT': '6543',
-            'OPTIONS': {
-                'sslmode': 'require',  # Force SSL
-            },
+            'NAME': os.getenv("POSTGRES_DB", "trip_planner_db"),
+            'USER': os.getenv("POSTGRES_USER", "postgres"),
+            'PASSWORD': os.getenv("POSTGRES_PASSWORD", ""),
+            'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+            'PORT': os.getenv("POSTGRES_PORT", "5432"),
         }
     }
 
