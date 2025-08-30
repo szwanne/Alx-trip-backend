@@ -101,8 +101,8 @@ if DJANGO_ENV == "production":
     DATABASES = {
         'default': dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
-            # conn_max_age=600,
-            # ssl_require=True  # Must be True for Supabase
+            conn_max_age=600,
+            ssl_require=True  # Must be True for Supabase
         )
     }
 else:
@@ -119,15 +119,6 @@ else:
             },
         }
     }
-
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=f"postgres://postgres:{os.environ.get('DB_PASSWORD')}@localhost:5432/trip_planner_db",
-#         conn_max_age=600,
-#         ssl_require=os.environ.get('DJANGO_ENV') == 'production'
-#     )
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -192,8 +183,8 @@ SIMPLE_JWT = {
 
 
 # Heroku SSL redirect (optional)
-# if os.environ.get('DJANGO_ENV') == 'production':
-#     SECURE_SSL_REDIRECT = True
+if os.environ.get('DJANGO_ENV') == 'production':
+    SECURE_SSL_REDIRECT = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
