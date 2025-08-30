@@ -244,12 +244,15 @@ SIMPLE_JWT = {
 if os.environ.get('DJANGO_ENV') == 'production':
     SECURE_SSL_REDIRECT = False
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://alx-trip-planner.vercel.app",
-    'https://localhost'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+#     "https://alx-trip-planner.vercel.app",
+#     'https://localhost'
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 LOGGING = {
     "version": 1,
