@@ -36,8 +36,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 # ALLOWED_HOSTS = os.getenv(
 #     "ALLOWED_HOSTS", ".up.railway.app,localhost,127.0.0.1").split(",")
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = [
-    f"https://{h}" for h in ALLOWED_HOSTS if ".up.railway.app" in h]
+# CSRF_TRUSTED_ORIGINS = [
+#     f"https://{h}" for h in ALLOWED_HOSTS if ".up.railway.app" in h]
 
 # Application definition
 
@@ -125,15 +125,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
 if DJANGO_ENV == "production":
-    # Heroku automatically sets DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
             conn_max_age=600,
             ssl_require=True
         )
     }
 else:
-    # Local Postgres
+    # Local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -234,7 +234,7 @@ SIMPLE_JWT = {
 
 # Heroku SSL redirect (optional)
 if os.environ.get('DJANGO_ENV') == 'production':
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
